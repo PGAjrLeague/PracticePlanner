@@ -61,6 +61,7 @@
                                 <option value="">Select your section...</option>
                                 <!-- Options will be populated by JS -->
                             </select>
+                            <p id="pgaSectionError" class="text-red-500 text-sm mt-1 hidden">Please select your PGA Section.</p>
                         </div>
                     </div>
                     <!-- Generate Button -->
@@ -127,6 +128,7 @@
             const emailPlanBtn = document.getElementById('emailPlanBtn');
             const coachEmailInput = document.getElementById('coachEmail');
             const emailError = document.getElementById('emailError');
+            const pgaSectionError = document.getElementById('pgaSectionError');
 
              // PEC Data mapping Sections to Emails
             const pecData = {
@@ -275,6 +277,19 @@
             };
             
             generateBtn.addEventListener('click', function() {
+                const section = pgaSectionSelect.value;
+                
+                // Validation for PGA Section
+                if (!section) {
+                    pgaSectionError.classList.remove('hidden');
+                    planResultDiv.classList.add('hidden'); // Ensure old results are hidden
+                    allStarInfoDiv.classList.add('hidden'); // Ensure old info is hidden
+                    return; // Stop the function
+                }
+                
+                // If section is selected, hide the error message
+                pgaSectionError.classList.add('hidden');
+
                 const age = document.getElementById('ageDivision').value;
                 const level = document.getElementById('competitiveness').value;
                 const duration = parseInt(document.getElementById('duration').value, 10);
@@ -360,7 +375,7 @@
                 // Add All-Star info to email body if applicable
                 if ((level === 'Intermediate' || level === 'Competitive') && age !== '9u') {
                     body += `All-Star Team Information:\n`;
-                    body += `Consider hosting an All Star Team & competing in All Star Play Days & the Section Championship.\n`;
+                    body += `You should consider hosting an All Star Team & competing in All Star Play Days & the Section Championship.\n`;
                     body += `Check out the All Star Play Day Handbook for more information: https://www.pgajrleague.com/compete/all-star-season\n`;
                     body += `Connect with your Player Engagement Consultant to learn more: https://resources.pga.org/increase-revenue/player-engagement/pga-player-engagement-consultants\n\n`;
                 }
@@ -382,3 +397,4 @@
     </script>
 </body>
 </html>
+
