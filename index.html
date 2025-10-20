@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADM Coaching Plan Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-4xl mx-auto">
+            
+            <header class="text-center mb-8">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900">ADM Golf Coaching Plan Generator</h1>
+                <p class="text-lg text-gray-600 mt-2">Create a development-focused plan for your young golfers.</p>
+            </header>
+
+            <main>
+                <!-- Input Form Card -->
+                <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Age Division -->
+                        <div>
+                            <label for="ageDivision" class="block text-sm font-medium text-gray-700 mb-1">Age Division</label>
+                            <select id="ageDivision" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                <option value="9u">9U</option>
+                                <option value="13u">13U</option>
+                                <option value="17u">17U</option>
+                            </select>
+                        </div>
+                        <!-- Competitiveness -->
+                        <div>
+                            <label for="competitiveness" class="block text-sm font-medium text-gray-700 mb-1">Competitiveness</label>
+                            <select id="competitiveness" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                <option value="Recreational">Recreational</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Competitive">Competitive</option>
+                            </select>
+                        </div>
+                        <!-- Plan Duration -->
+                        <div>
+                            <label for="duration" class="block text-sm font-medium text-gray-700 mb-1">Plan Duration (Weeks)</label>
+                            <select id="duration" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                <!-- Options will be populated by JS -->
+                            </select>
+                        </div>
+                         <!-- PGA Section -->
+                         <div>
+                            <label for="pgaSection" class="block text-sm font-medium text-gray-700 mb-1">PGA Section</label>
+                            <select id="pgaSection" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                <option value="">Select your section...</option>
+                                <!-- Options will be populated by JS -->
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Generate Button -->
+                    <div>
+                        <button id="generatePlanBtn" class="w-full text-white font-bold py-3 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 gradient-bg focus:outline-none focus:ring-4 focus:ring-purple-300">
+                            Generate Plan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Generated Plan Display Area -->
+                <div id="planResult" class="bg-white rounded-xl shadow-lg p-6 md:p-8 hidden">
+                    <h2 id="planTitle" class="text-2xl font-bold text-gray-900 mb-4 border-b pb-2">Your Coaching Plan</h2>
+                    <div id="planContent" class="space-y-6">
+                        <!-- Plan content will be inserted here -->
+                    </div>
+
+                    <!-- Email Plan Section -->
+                    <div id="emailSection" class="mt-8 pt-6 border-t border-gray-200">
+                         <h3 class="text-lg font-semibold text-gray-800 mb-3">Email This Plan</h3>
+                         <div class="flex flex-col sm:flex-row gap-4">
+                             <input type="email" id="coachEmail" placeholder="Enter your email address" class="flex-grow w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                             <button id="emailPlanBtn" class="text-white font-bold py-3 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105 bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300">
+                                 Send Email
+                             </button>
+                         </div>
+                         <p id="emailError" class="text-red-500 text-sm mt-2 hidden">Please enter a valid email address.</p>
+                         <p class="text-xs text-gray-500 mt-2">If a PGA Section is selected above, your Player Engagement Consultant will be CC'd on the email.</p>
+                    </div>
+                </div>
+
+                <!-- All-Star Info - Hidden by default -->
+                <div id="allStarInfo" class="text-center mt-8 hidden">
+                    <div class="max-w-2xl mx-auto bg-indigo-50 border border-indigo-200 rounded-lg p-6">
+                        <p class="text-gray-800 leading-relaxed">
+                            You should consider hosting an All Star Team & competing in All Star Play Days & the Section Championship.
+                            Check out the <a href="https://www.pgajrleague.com/compete/all-star-season" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:underline font-semibold">All Star Play Day Handbook</a> for more information.
+                            <br>
+                            <a href="https://resources.pga.org/increase-revenue/player-engagement/pga-player-engagement-consultants" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:underline font-semibold">Connect with your Player Engagement Consultant</a> to learn more.
+                        </p>
+                    </div>
+                </div>
+
+
+                <!-- PGA.coach Link -->
+                <div class="text-center mt-8">
+                    <p class="text-gray-600">For specific activity ideas, head over to <a href="https://www.pga.coach/" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:underline font-semibold">PGA.coach</a>.</p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ageDivisionSelect = document.getElementById('ageDivision');
+            const competitivenessSelect = document.getElementById('competitiveness');
+            const durationSelect = document.getElementById('duration');
+            const pgaSectionSelect = document.getElementById('pgaSection');
+            const generateBtn = document.getElementById('generatePlanBtn');
+            const planResultDiv = document.getElementById('planResult');
+            const planTitle = document.getElementById('planTitle');
+            const planContent = document.getElementById('planContent');
+            const allStarInfoDiv = document.getElementById('allStarInfo');
+            const emailPlanBtn = document.getElementById('emailPlanBtn');
+            const coachEmailInput = document.getElementById('coachEmail');
+            const emailError = document.getElementById('emailError');
+
+             // PEC Data mapping Sections to Emails
+            const pecData = {
+                "Alabama - NW Florida": "fmaynard@pgahq.com",
+                "Aloha": "jharkins@pgahq.com",
+                "Carolinas": "fmaynard@pgahq.com",
+                "Central New York": "bbain@pgahq.com",
+                "Colorado": "rgerjerts@pgahq.com",
+                "Connecticut": "bbain@pgahq.com",
+                "Gateway": "gblemm@pgahq.com",
+                "Georgia": "lcourt@pgahq.com",
+                "Gulf States": "gblemm@pgahq.com",
+                "Illinois": "srice@pgahq.com",
+                "Indiana": "srice@pgahq.com",
+                "Iowa": "rgerjerts@pgahq.com",
+                "Kentucky": "crguoynes@pgahq.com",
+                "Metropolitan": "jkrick@pgahq.com",
+                "Michigan": "srice@pgahq.com",
+                "Middle Atlantic": "crguoynes@pgahq.com",
+                "Midwest": "gblemm@pgahq.com",
+                "Minnesota": "rgerjerts@pgahq.com",
+                "Nebraska": "rgerjerts@pgahq.com",
+                "New England": "bbain@pgahq.com",
+                "New Jersey": "jkrick@pgahq.com",
+                "North Florida": "lcourt@pgahq.com",
+                "Northern California": "jharkins@pgahq.com",
+                "Northern Ohio": "kshafer@pgahq.com",
+                "Northern Texas": "rbailey@pgahq.com",
+                "Northeastern New York": "bbain@pgahq.com",
+                "Pacific Northwest": "poropallo@pgahq.com",
+                "Philadelphia": "jkrick@pgahq.com",
+                "Rocky Mountain": "rgerjerts@pgahq.com",
+                "South Central": "gblemm@pgahq.com",
+                "South Florida": "lcourt@pgahq.com",
+                "Southern California": "jharkins@pgahq.com",
+                "Southern Ohio": "kshafer@pgahq.com",
+                "Southern Texas": "rbailey@pgahq.com",
+                "Southwest": "poropallo@pgahq.com",
+                "Sun Country": "rbailey@pgahq.com",
+                "Tennessee": "fmaynard@pgahq.com",
+                "Tri-State": "kshafer@pgahq.com",
+                "Western New York": "jkrick@pgahq.com",
+                "Wisconsin": "kshafer@pgahq.com"
+            };
+
+            // Function to update competitiveness options based on age
+            function updateCompetitiveness() {
+                const competitiveOption = competitivenessSelect.querySelector('option[value="Competitive"]');
+                if (ageDivisionSelect.value === '9u') {
+                    // If 'Competitive' was selected, reset to 'Recreational'
+                    if (competitivenessSelect.value === 'Competitive') {
+                        competitivenessSelect.value = 'Recreational';
+                    }
+                    competitiveOption.style.display = 'none'; // Hide the option
+                } else {
+                    competitiveOption.style.display = 'block'; // Show the option for other age groups
+                }
+            }
+
+            // Handle 9U competitiveness restriction on change
+            ageDivisionSelect.addEventListener('change', updateCompetitiveness);
+            
+            // Initial check on page load
+            updateCompetitiveness();
+
+            // Populate duration dropdown
+            for (let i = 3; i <= 12; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${i} Weeks`;
+                durationSelect.appendChild(option);
+            }
+            
+            // Populate PGA Section dropdown
+            const sections = Object.keys(pecData).sort();
+            sections.forEach(section => {
+                const option = document.createElement('option');
+                option.value = section;
+                option.textContent = section;
+                pgaSectionSelect.appendChild(option);
+            });
+
+
+            // ADM Principles Data - GOLF SPECIFIC with weekly skills
+            const admPrinciples = {
+                '9u': {
+                    'Recreational': {
+                        focus: "Making golf fun! Focus on athletic movements (throwing, jumping), basic grip/posture, and creating a positive first experience with the game through play (SNAG, putting games).",
+                        weeklySkills: [
+                            "Week 1: Intro to Fun & Safety - Putting Games", "Week 2: The Grip - Holding the Club (Playfully)", "Week 3: The Stance - Athletic Posture & Balance Games", "Week 4: Chipping Fun - Tossing motion with a club", "Week 5: Full Swing Intro - Big Swings at Large Targets", "Week 6: On-Course Adventure - Playing one or two fun holes", "Week 7: Putting Challenge - Obstacle courses", "Week 8: Chipping to a Target - Landing in hoops", "Week 9: Full Swing Power - Learning to rotate", "Week 10: Rules & Etiquette - One simple rule", "Week 11: Team Games Day - Relays and scrambles", "Week 12: Celebration & Review - Favorite games"
+                        ]
+                    },
+                    'Intermediate': {
+                        focus: "Building fundamental golf skills. Introduce real clubs for chipping and putting. Develop a consistent setup routine and basic swinging motion. Keep it fun with skill challenges.",
+                        weeklySkills: [
+                            "Week 1: Setup Fundamentals - Grip, Aim, Stance", "Week 2: Putting Stroke - Pendulum Motion", "Week 3: Chipping Technique - Low, controlled shots", "Week 4: The Takeaway - Starting the swing", "Week 5: The Finish - Holding a balanced end position", "Week 6: On-Course Play - 2-hole scramble focusing on setup", "Week 7: Lag Putting - Distance control drills", "Week 8: Pitching Basics - High, soft shots", "Week 9: Full Swing Tempo - Smooth is fast", "Week 10: Basic Rules - Teeing ground and putting green", "Week 11: Skills Challenge - Putting and chipping games", "Week 12: Course Day & Review - Play 3 holes"
+                        ]
+                    },
+                    'Competitive': {
+                        focus: "Refining the basic swing motion and introducing on-course play. Focus on solid contact and direction. Introduce basic rules and etiquette in a simplified format.",
+                        weeklySkills: [
+                            "Week 1: Consistent Setup Routine", "Week 2: Solid Contact - Irons", "Week 3: Directional Control - Chipping", "Week 4: Full Swing Sequence - Body then arms", "Week 5: Driver Setup & Swing", "Week 6: On-Course Intro - Scramble format, focus on etiquette", "Week 7: Putting - Short range makes (3-5 feet)", "Week 8: Uneven Lies - Basic adjustments", "Week 9: Full Swing Balance & Finish", "Week 10: Essential Rules - Hazards and Lost Balls", "Week 11: Pre-Shot Routine Intro", "Week 12: 3-Hole Stroke Play Simulation"
+                        ]
+                    }
+                },
+                '13u': {
+                    'Recreational': {
+                        focus: "Getting the ball airborne consistently and enjoying time on the course. Focus on the full swing, basic rules, and playing with friends in a low-pressure environment.",
+                        weeklySkills: [
+                            "Week 1: Grip and Stance Refresher", "Week 2: Making Solid Contact with Irons", "Week 3: Intro to Hybrids & Fairway Woods", "Week 4: Driving for Distance & Fun", "Week 5: Basic Chipping & Putting", "Week 6: On-Course Fun - 4-hole scramble", "Week 7: Understanding Basic Rules & Etiquette", "Week 8: Hitting from the Tee", "Week 9: Aim & Alignment", "Week 10: Playing Faster - Pace of play", "Week 11: Team Games - Best Ball format", "Week 12: End of Season Scramble"
+                        ]
+                    },
+                    'Intermediate': {
+                        focus: "Developing a repeatable swing and understanding different shots. Introduce club selection, basic course management (aiming points), and age-appropriate fitness (flexibility, core).",
+                        weeklySkills: [
+                            "Week 1: Swing Plane Basics", "Week 2: Distance Control with Wedges", "Week 3: Iron Play - Ball Position", "Week 4: Hybrid & Fairway Wood Strategy", "Week 5: Driver - Optimizing for fairways", "Week 6: Course Management - Picking targets", "Week 7: Green Reading Basics", "Week 8: Specialty Short Game Shots (Bump & Run)", "Week 9: Intro to Fitness - Stretches & Core", "Week 10: Tracking Stats - Fairways & Putts", "Week 11: Pre-Shot Routine Development", "Week 12: 9-Hole Evaluation"
+                        ]
+                    },
+                    'Competitive': {
+                        focus: "Advanced swing technique and scoring. Introduce shot shaping (draw/fade), mental game basics (pre-shot routine), and structured practice (block vs. random).",
+                        weeklySkills: [
+                            "Week 1: Ball Flight Laws - Why the ball curves", "Week 2: Scoring Zone - 100 yards & in", "Week 3: Shaping Shots - Intro to Draw & Fade", "Week 4: Driver - Attack Angle & Ball Speed", "Week 5: Advanced Green Reading (AimPoint basics)", "Week 6: Course Strategy - When to attack pins", "Week 7: Mental Game - Visualization & Focus", "Week 8: Bunker Play - Sand shots", "Week 9: Structured Practice - Block vs. Random", "Week 10: Tournament Prep Routine", "Week 11: On-Course Pressure Drills", "Week 12: Performance Review & Goal Setting"
+                        ]
+                    }
+                },
+                '17u': {
+                    'Recreational': {
+                        focus: "Promoting golf as a lifelong sport. Focus on social play, understanding handicap systems, and enjoying different course formats.",
+                        weeklySkills: [
+                           "Week 1: Swing Tune-up & Goals", "Week 2: Understanding Your Distances", "Week 3: Course Management for Your Game", "Week 4: Intro to Handicaps", "Week 5: On-Course Games - Match Play", "Week 6: 9-Hole Social League Play", "Week 7: On-Course Games - Stableford", "Week 8: Fixing a Common Miss", "Week 9: On-Course Games - Scramble", "Week 10: Basic Equipment Knowledge", "Week 11: Playing in Different Weather", "Week 12: Year-End Fun Tournament"
+                        ]
+                    },
+                    'Intermediate': {
+                        focus: "Mastering swing mechanics and developing a deeper strategic understanding. Focus on performance under pressure and analyzing personal stats to find areas for improvement.",
+                        weeklySkills: [
+                            "Week 1: Technical Swing Assessment", "Week 2: Wedge Matrix - Dialing in distances", "Week 3: Advanced Iron Play - Trajectory control", "Week 4: Mental Game - Managing Expectations", "Week 5: Statistical Analysis - Strokes Gained Intro", "Week 6: Competitive Simulation - 9 holes", "Week 7: Advanced Short Game - Tricky lies", "Week 8: Optimizing the Driver", "Week 9: Developing a Game Plan for a Course", "Week 10: Fitness for Golf - Strength & Power", "Week 11: Pressure Practice - Consequence Drills", "Week 12: Tournament Performance Review"
+                        ]
+                    },
+                    'Competitive': {
+                        focus: "Peak performance training for tournament play. Highly specialized instruction on swing efficiency, mental toughness, fitness, nutrition, and college golf preparation.",
+                        weeklySkills: [
+                            "Week 1: Goal Setting & Tournament Scheduling", "Week 2: Advanced Ball Striking - Low point control", "Week 3: Scoring - Capitalizing on opportunities", "Week 4: Mental Game - Self-talk and Confidence", "Week 5: Course Management - Dissecting a scorecard", "Week 6: College Golf Prep - Resumes and communication", "Week 7: Advanced Stats - Strokes Gained analysis", "Week 8: Fitness & Nutrition for Tournaments", "Week 9: On-course Problem Solving", "Week 10: Peak Performance - Tapering for events", "Week 11: Multi-Day Tournament Simulation", "Week 12: Season Review & Off-Season Planning"
+                        ]
+                    }
+                }
+            };
+            
+            generateBtn.addEventListener('click', function() {
+                const age = document.getElementById('ageDivision').value;
+                const level = document.getElementById('competitiveness').value;
+                const duration = parseInt(document.getElementById('duration').value, 10);
+
+                const planData = admPrinciples[age][level];
+
+                // Update Title
+                planTitle.textContent = `${duration}-Week Plan: ${age.toUpperCase()} - ${level}`;
+                
+                // Clear previous content
+                planContent.innerHTML = '';
+
+                // Build new content
+                // 1. Overall Focus
+                const focusEl = document.createElement('div');
+                focusEl.innerHTML = `
+                    <h3 class="text-xl font-semibold text-indigo-700 mb-2">Overall Season Focus</h3>
+                    <p class="text-gray-700">${planData.focus}</p>
+                `;
+                planContent.appendChild(focusEl);
+
+                // 2. Weekly Breakdown
+                const breakdownContainer = document.createElement('div');
+                breakdownContainer.innerHTML = `<h3 class="text-xl font-semibold text-indigo-700 mt-6 mb-2">Weekly Skill Progression</h3>`;
+                
+                const list = document.createElement('ul');
+                list.className = 'space-y-4';
+
+                for (let i = 0; i < duration; i++) {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'p-4 bg-gray-50 rounded-lg border border-gray-200';
+                    listItem.innerHTML = `<p class="font-medium text-gray-800">${planData.weeklySkills[i]}</p>`;
+                    list.appendChild(listItem);
+                }
+                breakdownContainer.appendChild(list);
+                planContent.appendChild(breakdownContainer);
+
+                // Show or hide the All-Star info based on competitiveness AND age eligibility
+                if ((level === 'Intermediate' || level === 'Competitive') && age !== '9u') {
+                    allStarInfoDiv.classList.remove('hidden');
+                } else {
+                    allStarInfoDiv.classList.add('hidden');
+                }
+
+                // Show the result div
+                planResultDiv.classList.remove('hidden');
+                planResultDiv.scrollIntoView({ behavior: 'smooth' });
+
+            });
+
+            emailPlanBtn.addEventListener('click', function() {
+                const email = coachEmailInput.value;
+                if (!email || !email.includes('@')) {
+                    emailError.classList.remove('hidden');
+                    return;
+                }
+                emailError.classList.add('hidden');
+
+                const age = document.getElementById('ageDivision').value;
+                const level = document.getElementById('competitiveness').value;
+                const duration = parseInt(document.getElementById('duration').value, 10);
+                const section = pgaSectionSelect.value;
+                const pecEmail = pecData[section];
+                
+                const planData = admPrinciples[age][level];
+
+                const subject = `Your ${duration}-Week ADM Golf Plan: ${age.toUpperCase()} - ${level}`;
+                
+                let body = `Here is your generated coaching plan:\n\n`;
+                body += `========================================\n`;
+                body += `PLAN: ${duration}-Week Plan for ${age.toUpperCase()} - ${level}\n`;
+                body += `SECTION: ${section || 'Not specified'}\n`;
+                body += `========================================\n\n`;
+                body += `OVERALL SEASON FOCUS:\n${planData.focus}\n\n`;
+                body += `WEEKLY SKILL PROGRESSION:\n--------------------------------\n`;
+
+                for (let i = 0; i < duration; i++) {
+                    body += `${planData.weeklySkills[i]}\n`;
+                }
+
+                let mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                
+                // If a PEC email exists for the selected section, add them as CC
+                if (pecEmail) {
+                    mailtoLink += `&cc=${pecEmail}`;
+                }
+                
+                window.location.href = mailtoLink;
+            });
+        });
+    </script>
+</body>
+</html>
+
