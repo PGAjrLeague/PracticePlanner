@@ -354,6 +354,20 @@
                 for (let i = 0; i < duration; i++) {
                     body += `${planData.weeklySkills[i]}\n`;
                 }
+                
+                body += `\n\n========================================\n\n`;
+
+                // Add All-Star info to email body if applicable
+                if ((level === 'Intermediate' || level === 'Competitive') && age !== '9u') {
+                    body += `All-Star Team Information:\n`;
+                    body += `You should consider hosting an All Star Team & competing in All Star Play Days & the Section Championship.\n`;
+                    body += `Check out the All Star Play Day Handbook for more information: https://www.pgajrleague.com/compete/all-star-season\n`;
+                    body += `Connect with your Player Engagement Consultant to learn more: https://resources.pga.org/increase-revenue/player-engagement/pga-player-engagement-consultants\n\n`;
+                }
+
+                // Add PGA.coach link to email body
+                body += `For specific activity ideas, head over to PGA.coach: https://www.pga.coach/\n`;
+
 
                 let mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
                 
@@ -368,4 +382,3 @@
     </script>
 </body>
 </html>
-
